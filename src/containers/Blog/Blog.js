@@ -9,11 +9,12 @@ import './Blog.css';
 class Blog extends Component {
 
     state = {
-        posts: []
+        posts: [],
+        error: false
     }
 
     componentDidMount() {
-        axios.get('https://jsonplaceholder.typicode.com/posts')
+        axios.get('https://jsonplaceholder2.typicode.com/posts')
             .then(response => {
                 const posts = response.data.slice(0, 4);
                 const updatedPosts = posts.map( post => {
@@ -28,8 +29,14 @@ class Blog extends Component {
                     posts: updatedPosts,
                     selectedPostId: null
                 })
-                console.log(updatedPosts);
+                // console.log(updatedPosts);
             })
+            .catch(err =>  {
+                // console.log(err);
+                this.setState({
+                    error: true
+                })
+            });
     }
 
     postSelectedHandler = (id) => {
@@ -38,23 +45,27 @@ class Blog extends Component {
         })
     }
 
-    render () {
 
-        const posts = this.state.posts.map( (post) => (
-            <Post 
-            key={post.id} 
-            title={post.title} 
-            author={post.author}
-            clicked={() => this.postSelectedHandler(post.id)}></Post>
-        ))
+
+    render () {
+        let posts = <p style={{textAlign: 'center'}}>Something went wrong!</p>;
+        if (!this.state.error) {
+            posts = this.state.posts.map( (post) => (
+                <Post 
+                key={post.id} 
+                title={post.title} 
+                author={post.author}
+                clicked={() => this.postSelectedHandler(post.id)}></Post>
+            ))
+        }
 
         return (
             <div>
                 <section className="Posts">
-                {posts}
+                 {posts}
                 </section>
                 <section>
-                    <FullPost id = {this.state.selectedPostId}/>
+                    <FullPost id = {this.state.selectedPostId} />
                 </section>
                 <section>
                     <NewPost />
