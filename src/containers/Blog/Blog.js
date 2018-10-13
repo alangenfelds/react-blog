@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Route, NavLink} from 'react-router-dom';
+import {Route, NavLink, Redirect, Switch} from 'react-router-dom';
 
 
 import "./Blog.css";
@@ -8,21 +8,14 @@ import NewPost from '../../containers/Blog/NewPost/NewPost';
 
 class Blog extends Component {
 
-
-
-
-
-
   render() {
-   
-
     return (
       <div className="Blog">
         <header>
           <nav>
             <ul>
               <li>
-                <NavLink to="/" exact>Home</NavLink>
+                <NavLink to="/posts/" exact>Home</NavLink>
               </li>
               <li>
                 <NavLink to={{
@@ -34,16 +27,11 @@ class Blog extends Component {
             </ul>
           </nav>
         </header>
-        {/* <Route path="/" exact render={() => <Posts />} /> */}
-        <Route path="/" exact component={Posts} />
-        <Route path="/new-post" component={NewPost} />
-        <Route path="/post::id" render={() => <h1>POST</h1>} />
-        {/* <section>
-          <FullPost id={this.state.selectedPostId} />
-        </section>
-        <section>
-          <NewPost />
-        </section> */}
+        <Switch>
+          <Route path="/new-post" component={NewPost} />
+          <Route path="/posts" component={Posts} />
+          <Redirect from="/" to="/posts" />
+        </Switch>
       </div>
     );
   }
